@@ -9,9 +9,9 @@ Cada sección incluye implementación comentada, visualizaciones y análisis de 
 
 ## Contenido
 
-| # | Tema | Concepto clave | Dataset | Accuracy |
-|---|------|---------------|---------|----------|
-| 01 | [Redes densamente conectadas](./01_redes_densamente_conectadas/) | Clasificador lineal · Softmax · Detección de overfitting · Keras vs PyTorch | MNIST | ~92.4% |
+| # | Tema | Problemas | Datasets | Métricas |
+|---|------|-----------|----------|----------|
+| 01 | [Redes densamente conectadas](./01_redes_densamente_conectadas/) | Clasificación · Regresión | MNIST · California Housing | Acc ~92.4% · MAE ~$35k · R² ~0.78 |
 
 > Repositorio en construcción — se irán añadiendo nuevas arquitecturas progresivamente.
 
@@ -19,26 +19,28 @@ Cada sección incluye implementación comentada, visualizaciones y análisis de 
 
 ## 01 · Redes densamente conectadas
 
-Red neuronal de una sola capa densa entrenada para clasificar dígitos escritos a mano (0–9).  
-Implementada en dos frameworks para comparar su filosofía de diseño.
+Capas densas aplicadas a dos problemas clásicos: clasificación de dígitos y regresión de precios.  
+Cada problema se implementa en Keras y PyTorch para comparar su filosofía de diseño.
 
 **Qué explora:**
-- Preprocesado de imágenes: aplanado y normalización
-- Arquitectura mínima: `Dense(10, softmax)` — 7.850 parámetros
-- Ciclo completo: compilación, entrenamiento y evaluación
-- Visualización de pesos aprendidos por neurona
-- Detección de overfitting mediante curvas training vs validación
+- Clasificación multiclase (MNIST): `Dense(10, softmax)` — 7.850 parámetros, ~92.4% accuracy
+- Regresión (California Housing): `Dense(64) → Dense(32) → Dense(1)` — MAE ~$35k, R² ~0.78
+- Preprocesado: normalización de píxeles y `StandardScaler` para datos tabulares
+- Data leakage: ajustar el scaler solo con datos de entrenamiento
+- Detección de overfitting mediante curvas de loss training vs validación
 - Bucle de entrenamiento manual (PyTorch) vs `model.fit()` (Keras)
 - `DataLoader` + `Dataset` vs arrays NumPy directos
 
 ```
-Input (784) ──► Dense(10, softmax) ──► Predicción (0-9)
+Clasificación:  Input (784) ──► Dense(10, softmax) ──► Clase (0-9)
+Regresión:      Input (8)   ──► Dense(64) ──► Dense(32) ──► Dense(1) ──► Precio
 ```
 
-| Archivo | Framework |
-|---------|-----------|
-| `redes_densamente_conectadas.ipynb` | TensorFlow / Keras |
-| `mnist_pytorch.ipynb` | PyTorch |
+| Archivo | Problema | Framework |
+|---------|----------|-----------|
+| `redes_densamente_conectadas.ipynb` | Clasificación MNIST | TensorFlow / Keras |
+| `mnist_pytorch.ipynb` | Clasificación MNIST | PyTorch |
+| `regresion_precios.ipynb` | Regresión California Housing | Keras y PyTorch |
 
 ---
 
@@ -47,7 +49,7 @@ Input (784) ──► Dense(10, softmax) ──► Predicción (0-9)
 ```bash
 git clone https://github.com/mrlocky97/deep-learning-personal.git
 cd deep-learning-personal
-pip install tensorflow torch torchvision numpy matplotlib jupyter
+pip install tensorflow torch torchvision numpy matplotlib scikit-learn jupyter
 jupyter notebook
 ```
 
